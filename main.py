@@ -23,19 +23,48 @@ class Series(Production):
         self.season = season
     
     def __str__(self):
-        return f"Tytuł: {self.title} ({self.year}), S{self.season:02d}E{self.episode:02d}, Gatunek: {self.genre}"
+        return f"Tytuł: {self.title} ({self.year}), S{self.season:02d}E{self.episode:02d}, Liczba odtworzeń: {self.played}"
+
+def get_movies(library):
+    library = sorted(library, key=lambda movie: movie.title.lower())
+    for i in library:
+        if isinstance(i, Movie):
+            print(i)
+        else:
+            continue
+
+def get_series(library):
+    library = sorted(library, key=lambda series: series.title.lower())
+    for i in library:
+        if isinstance(i, Series):
+            print(i)
+        else:
+            continue
+
+def search(title, library):
+    for i in library:
+        if title.lower() in i.title.lower():
+            print(f"Film/serial {title} znajduje się w bibliotece")
+            return True
+    print(f"brak filmu/serialu {title} w bibliotece")
+    return False
 
 library = []
 
 movie1 = Movie(title="Pulp Fiction", year=1994, genre="Crime")
 movie2 = Movie(title="Django", year=2012, genre="western")
 series1 = Series(title="Californication", year=2007, genre="drama", episode=1, season=1)
+series2 = Series(title="Dexter", year=2006, genre="drama", episode=2, season=3)
 library.append(movie1)
-library.append(movie2)
 library.append(series1)
+library.append(movie2)
+library.append(series2)
 
 movie1.play()
 movie2.play()
 movie2.play()
-for i in library:
-    print(i)
+series1.play()
+
+get_movies(library)
+get_series(library)
+print(search("dexter", library))
