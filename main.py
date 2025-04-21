@@ -1,4 +1,6 @@
 import random
+from datetime import date
+today = date.today().strftime("%d.%m.%Y")
 
 class Production:
     def __init__(self, title, year, genre):
@@ -56,7 +58,7 @@ def search(title, library):
 def generate_views(library):
     random_production = random.choice(library)
     play = random.randint(1,100)
-    random_production.played =+ play
+    random_production.played += play
 
 def generate_views_x10(library):
     for i in range(10):
@@ -75,11 +77,24 @@ def top_titles(library, content_type):
         top = [i for i in library if isinstance(i, Series)]
         print("Najpopularniejsze seriale:")
         for series in top[:3]:
-            print(f"{series.title} Ilość odtworzeń {series.played}")
+            print(f"{series.title} S{series.season:02d}E{series.episode:02d} Ilość odtworzeń {series.played}")
+        return top
 
+def add_seasons(title, year, genre, season, episodes):
+    for i in range(1, episodes+1):
+        series = Series(title=title, year=year, genre=genre, season=season, episode=i)
+        library.append(series)
 
+def count_episodes(library, title, season):
+    count = 0
+    for i in library:
+        if isinstance(i, Series) and i.title == title and i.season == season:
+            count += 1
+    return count
 library = []
 
+print("Biblioteka filmów")
+add_seasons("Breaking bad", 2008, "Crime", 1, 24)
 movie1 = Movie(title="Pulp Fiction", year=1994, genre="Crime")
 movie2 = Movie(title="Django", year=2012, genre="western")
 movie3 = Movie(title="Gwiezdne wojny nowa nadzieja",year=1977, genre="Science fiction")
@@ -94,8 +109,10 @@ library.append(movie3)
 library.append(movie4)
 
 generate_views_x10(library)
-get_movies(library)
-get_series(library)
-search("deaxter", library)
-
+generate_views_x10(library)
+generate_views_x10(library)
+print(f"Najpopularniejsze filmy i seriale dnia {today}:")
+print("-----")
 top_titles(library, "filmy")
+print("-----")
+top_titles(library, "seriale")
